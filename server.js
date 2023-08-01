@@ -6,6 +6,7 @@ const colors = require('colors');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 const fileupload = require('express-fileupload');
+const cookieParser = require('cookie-parser');
 
 // load env vars
 dotenv.config({ path: './config/config.env' });
@@ -21,10 +22,13 @@ const { connect } = require('mongoose');
 
 const app = express();
 
-// body parser
+// Body parser
 app.use(express.json());
 
-// dev logging middleware
+// Cookie parser
+app.use(cookieParser());
+
+// Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
@@ -35,7 +39,7 @@ app.use(fileupload());
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// mount router
+// Mount router
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
 app.use('/api/v1/auth', auth);
